@@ -1,10 +1,11 @@
 import logging
+import time
 from pathlib import Path
 from typing import Annotated
 
 import yaml
 from pydantic import TypeAdapter
-from typer import Argument, Option, Typer
+from typer import Option, Typer
 
 from zhed.logging_utils import init_logging
 from zhed.models import Level
@@ -25,23 +26,23 @@ def noop() -> None:
 @app.command()
 def solve(
     *,
-    level_number: Annotated[int, Argument()],
     info: Annotated[bool, Option("--info/--no-info")] = False,
     debug: Annotated[bool, Option("--debug/--no-debug")] = False,
 ) -> None:
     init_logging(info=info, debug=debug)
 
-    logger.info("Starting solver for level %d", level_number)
-
     printer = Printer.new()
 
     levels = load_levels()
     for level in levels:
-        if level.number == level_number:
-            board = level.get_board()
-            printer.print_board(board)
-            for solution in Solver.solve(board):
-                printer.print_solution(solution)
+        board = level.get_board()
+        printer.print_board(board)
+        start_time = time.time()
+        for solution in Solver.solve(board):
+            elapsed_time = time.time() - start_time
+            printer.console.print(f"Level {level.number} solved in {elapsed_time:.2f} seconds.")
+            printer.print_solution(solution)
+            break
 
 
 def load_levels() -> list[Level]:
