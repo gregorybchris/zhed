@@ -5,17 +5,25 @@ from typing import Annotated
 
 import yaml
 from pydantic import TypeAdapter
+from rich.logging import RichHandler
 from typer import Option, Typer
 
-from zhed.logging_utils import init_logging
 from zhed.models import Level
 from zhed.printer import Printer
 from zhed.solver import Solver
 
 logger = logging.getLogger(__name__)
 
-
 app = Typer(pretty_exceptions_enable=False)
+
+
+def init_logging(info: bool = True, debug: bool = False) -> None:
+    if debug:
+        logging.basicConfig(level=logging.DEBUG, handlers=[RichHandler()])
+    elif info:
+        logging.basicConfig(level=logging.INFO, handlers=[RichHandler()])
+    else:
+        logging.basicConfig(level=logging.WARNING, handlers=[RichHandler()])
 
 
 @app.command()
