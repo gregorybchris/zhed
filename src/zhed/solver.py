@@ -43,19 +43,22 @@ class Solver:
 
         offset = 1
         while offset <= value:
-            new_loc = cls.translate(loc, direction, offset)
-            if not board.in_bounds(new_loc):
+            offset_loc = cls.translate(loc, direction, offset)
+            if not board.in_bounds(offset_loc):
                 break
 
-            if board.get(new_loc) == Tile.Empty:
-                board.set(new_loc, Tile.Blank)
-                edits.append(((new_loc), Tile.Empty))
-            elif board.get(new_loc) == Tile.Blank:
-                value += 1
-            elif board.get(new_loc) == Tile.Goal:
-                has_won = True
-            else:
-                value += 1
+            offset_value = board.get(offset_loc)
+            match offset_value:
+                case Tile.Empty:
+                    board.set(offset_loc, Tile.Blank)
+                    edits.append((offset_loc, Tile.Empty))
+                case Tile.Blank:
+                    value += 1
+                case Tile.Goal:
+                    has_won = True
+                case _:
+                    value += 1
+
             offset += 1
         return has_won, edits
 

@@ -18,6 +18,10 @@ uv sync
 
 ## Usage
 
+```bash
+zhed solve
+```
+
 ## Existing work
 
 - [MOAAS/ZhedAI](https://github.com/MOAAS/ZhedAI)
