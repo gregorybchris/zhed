@@ -1,12 +1,12 @@
 import logging
 import time
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Optional
 
 import yaml
 from pydantic import TypeAdapter
 from rich.logging import RichHandler
-from typer import Option, Typer
+from typer import Argument, Option, Typer
 
 from zhed.models import Level
 from zhed.printer import Printer
@@ -34,6 +34,7 @@ def noop() -> None:
 @app.command()
 def solve(
     *,
+    level_number: Annotated[Optional[int], Argument()] = None,
     info: Annotated[bool, Option("--info/--no-info")] = False,
     debug: Annotated[bool, Option("--debug/--no-debug")] = False,
 ) -> None:
@@ -43,6 +44,9 @@ def solve(
 
     levels = load_levels()
     for level in levels:
+        if level_number is not None and level.number != level_number:
+            continue
+
         board = level.get_board()
         printer.print_board(board)
         start_time = time.time()
