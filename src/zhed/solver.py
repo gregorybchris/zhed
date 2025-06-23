@@ -42,7 +42,8 @@ class Solver:
         has_won = False
 
         offset = 1
-        while offset <= value:
+        max_offset = value
+        while offset <= max_offset:
             offset_loc = cls.translate(loc, direction, offset)
             if not board.in_bounds(offset_loc):
                 break
@@ -53,11 +54,11 @@ class Solver:
                     board.set(offset_loc, Tile.Blank)
                     edits.append((offset_loc, Tile.Empty))
                 case Tile.Blank:
-                    value += 1
+                    max_offset += 1
                 case Tile.Goal:
                     has_won = True
                 case _:
-                    value += 1
+                    max_offset += 1
 
             offset += 1
         return has_won, edits
