@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 from typing import Iterator
 
-from zhed.models import Board, Direction, Edit, Loc, Move, Solution, Tile
+from zhed.models import Board, Direction, Edit, Loc, Move, Moves, Tile
 
 
 @dataclass
 class Solver:
     @classmethod
-    def solve(cls, board: Board) -> Iterator[Solution]:
+    def solve(cls, board: Board) -> Iterator[Moves]:
         return cls.solve_rec(board, [])
 
     @classmethod
-    def solve_rec(cls, board: Board, moves: list[Move]) -> Iterator[Solution]:
+    def solve_rec(cls, board: Board, moves: list[Move]) -> Iterator[Moves]:
         for loc in cls.iter_number_locs(board):
             for direction in Direction:
                 move = (loc, direction)

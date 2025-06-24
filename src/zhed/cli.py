@@ -50,15 +50,35 @@ def solve(
         board = level.get_board()
         printer.print_board(board)
         start_time = time.time()
-        for solution in Solver.solve(board):
+        for moves in Solver.solve(board):
             elapsed_time = time.time() - start_time
             printer.console.print(f"Level {level.number} solved in {elapsed_time:.2f} seconds.")
-            printer.print_solution(solution)
+            printer.print_moves(moves)
             break
 
 
+@app.command()
+def view(
+    *,
+    level_number: Annotated[Optional[int], Argument()] = None,
+    info: Annotated[bool, Option("--info/--no-info")] = False,
+    debug: Annotated[bool, Option("--debug/--no-debug")] = False,
+) -> None:
+    init_logging(info=info, debug=debug)
+
+    printer = Printer.new()
+
+    levels = load_levels()
+    for level in levels:
+        if level_number is not None and level.number != level_number:
+            continue
+
+        board = level.get_board()
+        printer.print_board(board)
+
+
 def load_levels() -> list[Level]:
-    levels_filepath = Path(__file__).parent / "levels.yaml"
+    levels_filepath = Path(__file__).parent / "data" / "levels.yaml"
     with levels_filepath.open("r", encoding="utf-8") as fp:
         levels_obj = yaml.safe_load(fp)
         return TypeAdapter(list[Level]).validate_python(levels_obj["levels"])

@@ -21,7 +21,7 @@ class Tile(IntEnum):
 
 Loc = tuple[int, int]
 Move = tuple[Loc, Direction]
-Solution = list[Move]
+Moves = list[Move]
 Edit = tuple[Loc, int]
 
 
@@ -54,7 +54,6 @@ class Board:
 class Level(BaseModel):
     number: int
     board_str: str
-    solution: Solution
 
     def get_board(self) -> Board:
         rows = [row.split() for row in self.board_str.strip().splitlines()]
@@ -73,3 +72,8 @@ class Level(BaseModel):
                 else:
                     board.set(loc, int(char))
         return board
+
+
+class Solution(BaseModel):
+    number: int
+    moves: list[Move]

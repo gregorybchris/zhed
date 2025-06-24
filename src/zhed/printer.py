@@ -5,7 +5,7 @@ from typing import Optional
 
 from rich.console import Console
 
-from zhed.models import Board, Direction, Solution, Tile
+from zhed.models import Board, Direction, Moves, Tile
 
 
 @dataclass(kw_only=True)
@@ -35,9 +35,9 @@ class Printer:
             ret += "\n"
         self.console.print(ret.strip())
 
-    def print_solution(self, solution: Solution) -> None:
+    def print_moves(self, moves: Moves) -> None:
         ret = "Solution:\n"
-        for move in solution:
+        for move in moves:
             loc, direction = move
             row, col = loc
             direction_color = self.direction_to_color(direction)
