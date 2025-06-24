@@ -24,10 +24,7 @@ zhed solve
 
 ## Existing work
 
-- [MOAAS/ZhedAI](https://github.com/MOAAS/ZhedAI)
-- [mikkelschmidt14/ZhedSolver](https://github.com/mikkelschmidt14/ZhedSolver)
-- [g2384/zhed-puzzle-solver](https://github.com/g2384/zhed-puzzle-solver)
-- [Omar-Abdul-Azeez/game_solver_zhed](https://github.com/Omar-Abdul-Azeez/game_solver_zhed)
-- [MOAAS/ZhedAI](https://github.com/MOAAS/ZhedAI)
-- [realpratikk/ZhedGameSolver](https://github.com/realpratikk/ZhedGameSolver)
+- [Optimizing Solvers for NP-Complete Zhed Puzzles](https://ir.library.oregonstate.edu/concern/parent/pz50h5011/file_sets/xk81jt90z)
+- [Zhed is NP-Complete](https://arxiv.org/pdf/2112.07914)
 - [glguy/5puzzle](https://github.com/glguy/5puzzle)
+- [MOAAS/ZhedAI](https://github.com/MOAAS/ZhedAI)
