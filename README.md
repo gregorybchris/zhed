@@ -8,6 +8,8 @@
 
 ## About
 
+This repo contains a solver for the [Zhed puzzle game](https://play.google.com/store/apps/details?id=com.groundcontrol.zhed) as well as all levels from the game encoded in [levels.yaml](./src/zhed/data//levels.yaml)
+
 ## Installation
 
 Install using [uv](https://docs.astral.sh/uv)
@@ -18,7 +20,7 @@ uv sync
 
 ## Usage
 
-All levels are encoded in [levels.yaml](./src/zhed/data//levels.yaml) and can be visualized with the `zhed view` command.
+Levels can be visualized with the `zhed view` command.
 
 ```bash
 zhed view 64
