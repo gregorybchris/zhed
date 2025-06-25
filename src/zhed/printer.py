@@ -5,7 +5,7 @@ from typing import Optional
 
 from rich.console import Console
 
-from zhed.models import Board, Direction, Moves, Tile
+from zhed.models import Board, Direction, Level, Moves, Tile
 
 
 @dataclass(kw_only=True)
@@ -18,21 +18,32 @@ class Printer:
             console = Console()
         return cls(console=console)
 
-    def print_board(self, board: Board) -> None:
+    def print_level(self, level: Level) -> None:
+        board = level.get_board()
+        self.print_board(board, level.number)
+
+    def print_board(self, board: Board, number: Optional[int]) -> None:
         ret = ""
-        for row in range(board.height):
-            for col in range(board.width):
+        ret += "[white]╭" + "─" * (board.n_cols * 2 + 1) + "╮\n"
+        if number is not None:
+            num_len = len(str(number))
+            ret += f"[white]│ Level {number} [/white]" + " " * (board.n_cols * 2 - num_len - 7) + "[white]│\n"
+            ret += "[white]├" + "─" * (board.n_cols * 2 + 1) + "┤\n"
+        for row in range(board.n_rows):
+            ret += "[white]│[/white] "
+            for col in range(board.n_cols):
                 loc = (row, col)
                 tile = board.get(loc)
                 if tile == Tile.Goal:
-                    ret += "[white]@[/white] "
+                    ret += "[green]◎[/green] "
                 elif tile == Tile.Empty:
-                    ret += ". "
+                    ret += "[black]□[/black] "
                 elif tile == Tile.Blank:
-                    ret += "o "
+                    ret += "[black]■[/black] "
                 else:
                     ret += f"[blue]{tile}[/blue] "
-            ret += "\n"
+            ret += "[white]│[/white]\n"
+        ret += "[white]╰" + "─" * (board.n_cols * 2 + 1) + "╯\n"
         self.console.print(ret.strip())
 
     def print_moves(self, moves: Moves) -> None:

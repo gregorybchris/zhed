@@ -27,28 +27,32 @@ Edit = tuple[Loc, int]
 
 @dataclass(kw_only=True)
 class Board:
-    width: int
-    height: int
+    n_rows: int
+    n_cols: int
     tiles: list[list[int]]
 
     @classmethod
-    def new(cls, width: int, height: int) -> Board:
-        tiles: list[list[int]] = [[Tile.Empty for _ in range(width)] for _ in range(height)]
-        return cls(width=width, height=height, tiles=tiles)
+    def new(cls, n_rows: int, n_cols: int) -> Board:
+        tiles: list[list[int]] = [[Tile.Empty for _ in range(n_cols)] for _ in range(n_rows)]
+        return cls(n_rows=n_rows, n_cols=n_cols, tiles=tiles)
 
     def get(self, loc: Loc) -> int:
-        assert self.in_bounds(loc)
+        assert self.in_bounds(loc), f"OOB: {loc}"
         row, col = loc
         return self.tiles[row][col]
 
     def set(self, loc: Loc, value: int) -> None:
-        assert self.in_bounds(loc)
+        assert self.in_bounds(loc), f"OOB: {loc}"
         row, col = loc
         self.tiles[row][col] = value
 
     def in_bounds(self, loc: Loc) -> bool:
         row, col = loc
-        return row >= 0 and row < self.height and col >= 0 and col < self.width
+        return row >= 0 and row < self.n_rows and col >= 0 and col < self.n_cols
+
+    @property
+    def shape(self) -> tuple[int, int]:
+        return self.n_rows, self.n_cols
 
 
 class Level(BaseModel):
@@ -57,9 +61,9 @@ class Level(BaseModel):
 
     def get_board(self) -> Board:
         rows = [row.split() for row in self.board_str.strip().splitlines()]
-        height = len(rows)
-        width = len(rows[0]) if height > 0 else 0
-        board = Board.new(width, height)
+        n_rows = len(rows)
+        n_cols = len(rows[0]) if n_rows > 0 else 0
+        board = Board.new(n_cols, n_rows)
         for r, row in enumerate(rows):
             for c, char in enumerate(row):
                 loc = (r, c)

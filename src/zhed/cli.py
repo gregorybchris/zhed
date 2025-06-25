@@ -48,7 +48,7 @@ def solve(
             continue
 
         board = level.get_board()
-        printer.print_board(board)
+        printer.print_board(board, number=level.number)
         start_time = time.time()
         for moves in Solver.solve(board):
             elapsed_time = time.time() - start_time
@@ -73,8 +73,7 @@ def view(
         if level_number is not None and level.number != level_number:
             continue
 
-        board = level.get_board()
-        printer.print_board(board)
+        printer.print_level(level)
 
 
 def load_levels() -> list[Level]:

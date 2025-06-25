@@ -24,8 +24,8 @@ class Solver:
 
     @classmethod
     def iter_number_locs(cls, board: Board) -> Iterator[Loc]:
-        for row in range(board.height):
-            for col in range(board.width):
+        for row in range(board.n_rows):
+            for col in range(board.n_cols):
                 loc = (row, col)
                 value = board.get(loc)
                 if value not in (Tile.Empty, Tile.Blank, Tile.Goal):
