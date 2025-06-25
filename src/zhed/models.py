@@ -37,12 +37,12 @@ class Board:
         return cls(n_rows=n_rows, n_cols=n_cols, tiles=tiles)
 
     def get(self, loc: Loc) -> int:
-        assert self.in_bounds(loc), f"OOB: {loc}"
+        assert self.in_bounds(loc), f"OOB: {loc} with shape {self.shape}"
         row, col = loc
         return self.tiles[row][col]
 
     def set(self, loc: Loc, value: int) -> None:
-        assert self.in_bounds(loc), f"OOB: {loc}"
+        assert self.in_bounds(loc), f"OOB: {loc} with shape {self.shape}"
         row, col = loc
         self.tiles[row][col] = value
 
@@ -63,7 +63,7 @@ class Level(BaseModel):
         rows = [row.split() for row in self.board_str.strip().splitlines()]
         n_rows = len(rows)
         n_cols = len(rows[0]) if n_rows > 0 else 0
-        board = Board.new(n_cols, n_rows)
+        board = Board.new(n_rows, n_cols)
         for r, row in enumerate(rows):
             for c, char in enumerate(row):
                 loc = (r, c)
