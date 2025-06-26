@@ -23,6 +23,17 @@ class Solver:
                 cls.undo_edits(board, edits)
 
     @classmethod
+    def solve_new(cls, board: Board) -> Iterator[list[Move]]:
+        # 1. Find all goal locs, set them as target locs
+        # 2. List all number locs that are in the same row or column as each target loc, call these "aligned"
+        #    Keep track of the direction from the aligned loc to the target loc
+        # 3. For each aligned loc, compute the path to the target loc, enumerating the path locs
+        # 4. Compute the number of path locs that need to be covered = len(path) - aligned loc value
+        #    We only need this many moves to complete the path
+        # 5. For each path loc, let it be a new target loc, and repeat from step 2
+        raise NotImplementedError
+
+    @classmethod
     def iter_number_locs(cls, board: Board) -> Iterator[Loc]:
         for row in range(board.n_rows):
             for col in range(board.n_cols):
