@@ -48,6 +48,7 @@ def solve(
             continue
 
         board = level.get_board()
+        print()
         printer.print_board(board, number=level.number)
         start_time = time.time()
         for moves in Solver.solve(board):

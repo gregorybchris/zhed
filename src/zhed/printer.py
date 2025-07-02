@@ -53,7 +53,7 @@ class Printer:
             row, col = loc
             direction_color = self.direction_to_color(direction)
             ret += (
-                f"[white]- [reset]([white]{row}[reset], [white]{col}[reset]) [white]-> [{direction_color}]{direction}\n"
+                f"[white]• [reset]([white]{row}[reset], [white]{col}[reset]) [white]→ [{direction_color}]{direction}\n"
             )
         self.console.print(ret.strip())
 
