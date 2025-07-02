@@ -21,7 +21,6 @@ class Tile(IntEnum):
 
 Loc = tuple[int, int]
 Move = tuple[Loc, Direction]
-Moves = list[Move]
 Edit = tuple[Loc, int]
 
 

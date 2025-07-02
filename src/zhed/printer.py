@@ -5,7 +5,7 @@ from typing import Optional
 
 from rich.console import Console
 
-from zhed.models import Board, Direction, Level, Moves, Tile
+from zhed.models import Board, Direction, Level, Move, Tile
 
 
 @dataclass(kw_only=True)
@@ -46,7 +46,7 @@ class Printer:
         ret += "[white]╰" + "─" * (board.n_cols * 2 + 1) + "╯\n"
         self.console.print(ret.strip())
 
-    def print_moves(self, moves: Moves) -> None:
+    def print_moves(self, moves: list[Move]) -> None:
         ret = "Solution:\n"
         for move in moves:
             loc, direction = move
