@@ -100,3 +100,10 @@ class TestSolver:
 
         empty_board = Board.new(8, 8)
         assert list(Solver.iter_number_locs(empty_board)) == []
+
+    def test_iter_goal_locs(self, board: Board) -> None:
+        goal_locs = list(Solver.iter_goal_locs(board))
+        assert goal_locs == [(2, 6)]
+
+        empty_board = Board.new(8, 8)
+        assert list(Solver.iter_goal_locs(empty_board)) == []

@@ -32,6 +32,14 @@ class Solver:
                     yield loc
 
     @classmethod
+    def iter_goal_locs(cls, board: Board) -> Iterator[Loc]:
+        for row in range(board.n_rows):
+            for col in range(board.n_cols):
+                loc = (row, col)
+                if board.get(loc) == Tile.Goal:
+                    yield loc
+
+    @classmethod
     def make_move(cls, board: Board, move: Move) -> tuple[bool, list[Edit]]:
         loc, direction = move
         value = board.get(loc)
