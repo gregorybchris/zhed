@@ -64,6 +64,17 @@ class Solver:
         return has_won, edits
 
     @classmethod
+    def make_moves(cls, board: Board, moves: list[Move]) -> tuple[bool, list[Edit]]:
+        edits = []
+        has_won = False
+        for move in moves:
+            move_has_won, move_edits = cls.make_move(board, move)
+            edits.extend(move_edits)
+            if move_has_won:
+                has_won = True
+        return has_won, edits
+
+    @classmethod
     def undo_edits(cls, board: Board, edits: list[Edit]) -> None:
         for edit in edits:
             loc, value = edit

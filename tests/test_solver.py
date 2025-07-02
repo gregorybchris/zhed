@@ -56,6 +56,24 @@ class TestSolver:
         assert board.get((4, 4)) == Tile.Blank
         assert board.get((4, 5)) == Tile.Empty
 
+    def test_make_moves(self, board: Board) -> None:
+        moves = [((5, 2), Direction.Up), ((4, 1), Direction.Right)]
+        has_won, edits = Solver.make_moves(board, moves)
+        assert not has_won
+        assert edits == [
+            ((5, 2), 1),
+            ((4, 2), Tile.Empty),
+            ((4, 1), 2),
+            ((4, 3), Tile.Empty),
+            ((4, 4), Tile.Empty),
+        ]
+        assert board.get((5, 2)) == Tile.Blank
+        assert board.get((4, 1)) == Tile.Blank
+        assert board.get((4, 2)) == Tile.Blank
+        assert board.get((4, 3)) == Tile.Blank
+        assert board.get((4, 4)) == Tile.Blank
+        assert board.get((4, 5)) == Tile.Empty
+
     def test_undo_edits(self, board: Board) -> None:
         move_1 = ((5, 2), Direction.Up)
         _, edits_1 = Solver.make_move(board, move_1)
