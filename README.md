@@ -66,3 +66,4 @@ Solution:
 - [Zhed is NP-Complete](https://arxiv.org/pdf/2112.07914)
 - [glguy/5puzzle](https://github.com/glguy/5puzzle)
 - [MOAAS/ZhedAI](https://github.com/MOAAS/ZhedAI)
+- [mikkelschmidt14/ZhedSolver](https://github.com/mikkelschmidt14/ZhedSolver)
