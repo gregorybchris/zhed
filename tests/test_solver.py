@@ -116,3 +116,13 @@ class TestSolver:
         assert list(Solver.iter_path_locs((2, 3), (2, 6))) == [(2, 3), (2, 4), (2, 5), (2, 6)]
         assert list(Solver.iter_path_locs((4, 4), (4, 1))) == [(4, 1), (4, 2), (4, 3), (4, 4)]
         assert list(Solver.iter_path_locs((5, 5), (1, 5))) == [(1, 5), (2, 5), (3, 5), (4, 5), (5, 5)]
+
+    def test_solve(self, board: Board) -> None:
+        solutions = list(Solver.solve(board))
+        assert len(solutions) == 1
+        assert solutions[0] == [
+            ((5, 2), Direction.Up),
+            ((4, 1), Direction.Right),
+            ((5, 4), Direction.Up),
+            ((2, 3), Direction.Right),
+        ]
