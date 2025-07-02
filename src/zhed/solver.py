@@ -48,6 +48,19 @@ class Solver:
                 yield (row, col)
 
     @classmethod
+    def iter_path_locs(cls, loc_a: Loc, loc_b: Loc) -> Iterator[Loc]:
+        row_a, col_a = loc_a
+        row_b, col_b = loc_b
+
+        assert loc_a != loc_b, f"Locs {loc_a} and {loc_b} must be different."
+        assert row_a == row_b or col_a == col_b, f"Locs {loc_a} and {loc_b} must be aligned"
+
+        if row_a == row_b:  # Horizontal path
+            yield from ((row_a, col) for col in range(min(col_a, col_b), max(col_a, col_b) + 1))
+        elif col_a == col_b:  # Vertical path
+            yield from ((row, col_a) for row in range(min(row_a, row_b), max(row_a, row_b) + 1))
+
+    @classmethod
     def make_move(cls, board: Board, move: Move) -> tuple[bool, list[Edit]]:
         loc, direction = move
         value = board.get(loc)

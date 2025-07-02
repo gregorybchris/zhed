@@ -111,3 +111,8 @@ class TestSolver:
     def test_iter_aligned_locs(self, board: Board) -> None:
         assert list(Solver.iter_aligned_locs(board, (2, 6))) == [(2, 3)]
         assert list(Solver.iter_aligned_locs(board, (4, 2))) == [(4, 1), (5, 2)]
+
+    def test_iter_path_locs(self) -> None:
+        assert list(Solver.iter_path_locs((2, 3), (2, 6))) == [(2, 3), (2, 4), (2, 5), (2, 6)]
+        assert list(Solver.iter_path_locs((4, 4), (4, 1))) == [(4, 1), (4, 2), (4, 3), (4, 4)]
+        assert list(Solver.iter_path_locs((5, 5), (1, 5))) == [(1, 5), (2, 5), (3, 5), (4, 5), (5, 5)]
