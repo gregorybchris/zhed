@@ -20,7 +20,7 @@ class Solver:
                 if has_won:
                     yield new_moves
                 yield from cls.solve_rec(board, new_moves)
-                cls.undo_move(board, edits)
+                cls.undo_edits(board, edits)
 
     @classmethod
     def iter_number_locs(cls, board: Board) -> Iterator[Loc]:
@@ -64,7 +64,7 @@ class Solver:
         return has_won, edits
 
     @classmethod
-    def undo_move(cls, board: Board, edits: list[Edit]) -> None:
+    def undo_edits(cls, board: Board, edits: list[Edit]) -> None:
         for edit in edits:
             loc, value = edit
             board.set(loc, value)

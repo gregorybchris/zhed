@@ -56,21 +56,21 @@ class TestSolver:
         assert board.get((4, 4)) == Tile.Blank
         assert board.get((4, 5)) == Tile.Empty
 
-    def test_undo_move(self, board: Board) -> None:
+    def test_undo_edits(self, board: Board) -> None:
         move_1 = ((5, 2), Direction.Up)
         _, edits_1 = Solver.make_move(board, move_1)
 
         move_2 = ((4, 1), Direction.Right)
         _, edits_2 = Solver.make_move(board, move_2)
 
-        Solver.undo_move(board, edits_2)
+        Solver.undo_edits(board, edits_2)
         assert board.get((4, 1)) == 2
         assert board.get((4, 2)) == Tile.Blank
         assert board.get((4, 3)) == Tile.Empty
         assert board.get((4, 4)) == Tile.Empty
         assert board.get((4, 5)) == Tile.Empty
 
-        Solver.undo_move(board, edits_1)
+        Solver.undo_edits(board, edits_1)
         assert board.get((5, 2)) == 1
         assert board.get((4, 2)) == Tile.Empty
         assert board.get((3, 2)) == Tile.Empty
