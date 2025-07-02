@@ -107,3 +107,7 @@ class TestSolver:
 
         empty_board = Board.new(8, 8)
         assert list(Solver.iter_goal_locs(empty_board)) == []
+
+    def test_iter_aligned_locs(self, board: Board) -> None:
+        assert list(Solver.iter_aligned_locs(board, (2, 6))) == [(2, 3)]
+        assert list(Solver.iter_aligned_locs(board, (4, 2))) == [(4, 1), (5, 2)]

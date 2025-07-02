@@ -40,6 +40,14 @@ class Solver:
                     yield loc
 
     @classmethod
+    def iter_aligned_locs(cls, board: Board, loc: Loc) -> Iterator[Loc]:
+        r, c = loc
+        for row, col in cls.iter_number_locs(board):
+            # Same row or column, but not the same loc
+            if (row == r) != (col == c):
+                yield (row, col)
+
+    @classmethod
     def make_move(cls, board: Board, move: Move) -> tuple[bool, list[Edit]]:
         loc, direction = move
         value = board.get(loc)
