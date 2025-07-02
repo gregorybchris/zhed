@@ -20,9 +20,9 @@ class Printer:
 
     def print_level(self, level: Level) -> None:
         board = level.get_board()
-        self.print_board(board, level.number)
+        self.print_board(board, number=level.number)
 
-    def print_board(self, board: Board, number: Optional[int]) -> None:
+    def print_board(self, board: Board, number: Optional[int] = None) -> None:
         ret = ""
         ret += "[white]╭" + "─" * (board.n_cols * 2 + 1) + "╮\n"
         if number is not None:
