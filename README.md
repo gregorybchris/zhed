@@ -79,17 +79,17 @@ zhed play 10
 
 Controls:
 
-```txt
-• ↑/↓/←/→  |  move cursor
-• w/a/s/d  |  make move
-• z/u      |  undo move
-• r        |  reset board
-• 1-9      |  set number tile
-• g        |  set goal tile
-• e        |  set empty tile
-• b        |  set blank tile
-• q        |  quit
-```
+| Key     | Action          |
+| ------- | --------------- |
+| ↑/↓/←/→ | move cursor     |
+| w/a/s/d | make move       |
+| z/u     | undo move       |
+| r       | reset board     |
+| 1-9     | set number tile |
+| g       | set goal tile   |
+| e       | set empty tile  |
+| b       | set blank tile  |
+| q       | quit            |
 
 ### `zhed check`
 
