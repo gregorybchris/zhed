@@ -55,7 +55,7 @@ zhed solve
 zhed solve 10
 ```
 
-```txt
+```rs
 Level 10 solved in 0.70 seconds.
 - (2, 4) -> L
 - (1, 3) -> D
