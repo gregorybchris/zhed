@@ -27,7 +27,7 @@ class Printer:
         ret += "[white]╭" + "─" * (board.n_cols * 2 + 1) + "╮\n"
         if number is not None:
             num_len = len(str(number))
-            ret += f"[white]│ Level {number} [/white]" + " " * (board.n_cols * 2 - num_len - 7) + "[white]│\n"
+            ret += f"[white]│[bold] Level {number} [/bold]" + " " * (board.n_cols * 2 - num_len - 7) + "│[/white]\n"
             ret += "[white]├" + "─" * (board.n_cols * 2 + 1) + "┤\n"
         for row in range(board.n_rows):
             ret += "[white]│[/white] "
