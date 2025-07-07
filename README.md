@@ -8,7 +8,12 @@
 
 ## About
 
-This repo contains a solver for the [Zhed puzzle game](https://play.google.com/store/apps/details?id=com.groundcontrol.zhed) as well as all levels from the game encoded in [levels.yaml](./src/zhed/data//levels.yaml)
+This repo contains:
+
+- A solver for the [Zhed puzzle game](https://play.google.com/store/apps/details?id=com.groundcontrol.zhed)
+- All levels from the game encoded in [levels.yaml](./src/zhed/data//levels.yaml)
+- Solutions for the levels in [solutions.yaml](./src/zhed/data/solutions.yaml)
+- A terminal-based version of the game
 
 ## Installation
 
@@ -56,7 +61,7 @@ zhed solve 10
 ```
 
 ```rs
-Level 10 solved in 0.70 seconds.
+Level 10 solved in 0.70 seconds
 - (2, 4) -> L
 - (1, 3) -> D
 - (4, 2) -> R

@@ -54,7 +54,7 @@ def solve(
         start_time = time.time()
         for moves in Solver.solve(board):
             elapsed_time = time.time() - start_time
-            console.print(f"Level {level.number} solved in {elapsed_time:.2f} seconds.")
+            console.print(f"Level {level.number} solved in {elapsed_time:.2f} seconds")
             printer.print_moves(moves)
             break
 
