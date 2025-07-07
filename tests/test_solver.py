@@ -14,28 +14,28 @@ class TestSolver:
         assert Solver.translate(loc, Direction.Left, 1) == (2, 1)
         assert Solver.translate(loc, Direction.Right, 1) == (2, 3)
 
-    def test_make_move(self, board: Board) -> None:
+    def test_make_move(self, board_5: Board) -> None:
         move_1 = ((5, 2), Direction.Up)
-        has_won_1, edits_1 = Solver.make_move(board, move_1)
+        has_won_1, edits_1 = Solver.make_move(board_5, move_1)
         assert not has_won_1
         assert edits_1 == [((5, 2), 1), ((4, 2), Tile.Empty)]
-        assert board.get((5, 2)) == Tile.Blank
-        assert board.get((4, 2)) == Tile.Blank
-        assert board.get((3, 2)) == Tile.Empty
+        assert board_5.get((5, 2)) == Tile.Blank
+        assert board_5.get((4, 2)) == Tile.Blank
+        assert board_5.get((3, 2)) == Tile.Empty
 
         move_2 = ((4, 1), Direction.Right)
-        has_won_2, edits_2 = Solver.make_move(board, move_2)
+        has_won_2, edits_2 = Solver.make_move(board_5, move_2)
         assert not has_won_2
         assert edits_2 == [((4, 1), 2), ((4, 3), Tile.Empty), ((4, 4), Tile.Empty)]
-        assert board.get((4, 1)) == Tile.Blank
-        assert board.get((4, 2)) == Tile.Blank
-        assert board.get((4, 3)) == Tile.Blank
-        assert board.get((4, 4)) == Tile.Blank
-        assert board.get((4, 5)) == Tile.Empty
+        assert board_5.get((4, 1)) == Tile.Blank
+        assert board_5.get((4, 2)) == Tile.Blank
+        assert board_5.get((4, 3)) == Tile.Blank
+        assert board_5.get((4, 4)) == Tile.Blank
+        assert board_5.get((4, 5)) == Tile.Empty
 
-    def test_make_moves(self, board: Board) -> None:
+    def test_make_moves(self, board_5: Board) -> None:
         moves = [((5, 2), Direction.Up), ((4, 1), Direction.Right)]
-        has_won, edits = Solver.make_moves(board, moves)
+        has_won, edits = Solver.make_moves(board_5, moves)
         assert not has_won
         assert edits == [
             ((5, 2), 1),
@@ -44,63 +44,63 @@ class TestSolver:
             ((4, 3), Tile.Empty),
             ((4, 4), Tile.Empty),
         ]
-        assert board.get((5, 2)) == Tile.Blank
-        assert board.get((4, 1)) == Tile.Blank
-        assert board.get((4, 2)) == Tile.Blank
-        assert board.get((4, 3)) == Tile.Blank
-        assert board.get((4, 4)) == Tile.Blank
-        assert board.get((4, 5)) == Tile.Empty
+        assert board_5.get((5, 2)) == Tile.Blank
+        assert board_5.get((4, 1)) == Tile.Blank
+        assert board_5.get((4, 2)) == Tile.Blank
+        assert board_5.get((4, 3)) == Tile.Blank
+        assert board_5.get((4, 4)) == Tile.Blank
+        assert board_5.get((4, 5)) == Tile.Empty
 
-    def test_make_move_raises_on_non_number(self, board: Board) -> None:
+    def test_make_move_raises_on_non_number(self, board_5: Board) -> None:
         move = ((0, 0), Direction.Up)
         with pytest.raises(AssertionError, match=re.escape("Cannot move from (0, 0) which is not a number tile.")):
-            Solver.make_move(board, move)
+            Solver.make_move(board_5, move)
 
-    def test_undo_edits(self, board: Board) -> None:
+    def test_undo_edits(self, board_5: Board) -> None:
         move_1 = ((5, 2), Direction.Up)
-        _, edits_1 = Solver.make_move(board, move_1)
+        _, edits_1 = Solver.make_move(board_5, move_1)
 
         move_2 = ((4, 1), Direction.Right)
-        _, edits_2 = Solver.make_move(board, move_2)
+        _, edits_2 = Solver.make_move(board_5, move_2)
 
-        Solver.undo_edits(board, edits_2)
-        assert board.get((4, 1)) == 2
-        assert board.get((4, 2)) == Tile.Blank
-        assert board.get((4, 3)) == Tile.Empty
-        assert board.get((4, 4)) == Tile.Empty
-        assert board.get((4, 5)) == Tile.Empty
+        Solver.undo_edits(board_5, edits_2)
+        assert board_5.get((4, 1)) == 2
+        assert board_5.get((4, 2)) == Tile.Blank
+        assert board_5.get((4, 3)) == Tile.Empty
+        assert board_5.get((4, 4)) == Tile.Empty
+        assert board_5.get((4, 5)) == Tile.Empty
 
-        Solver.undo_edits(board, edits_1)
-        assert board.get((5, 2)) == 1
-        assert board.get((4, 2)) == Tile.Empty
-        assert board.get((3, 2)) == Tile.Empty
-        assert board.get((2, 2)) == Tile.Empty
+        Solver.undo_edits(board_5, edits_1)
+        assert board_5.get((5, 2)) == 1
+        assert board_5.get((4, 2)) == Tile.Empty
+        assert board_5.get((3, 2)) == Tile.Empty
+        assert board_5.get((2, 2)) == Tile.Empty
 
-    def test_iter_number_locs(self, board: Board) -> None:
-        number_locs = list(Solver.iter_number_locs(board))
+    def test_iter_number_locs(self, board_5: Board) -> None:
+        number_locs = list(Solver.iter_number_locs(board_5))
         assert number_locs == [(2, 3), (4, 1), (5, 2), (5, 4)]
 
         empty_board = Board.new(8, 8)
         assert list(Solver.iter_number_locs(empty_board)) == []
 
-    def test_iter_goal_locs(self, board: Board) -> None:
-        goal_locs = list(Solver.iter_goal_locs(board))
+    def test_iter_goal_locs(self, board_5: Board) -> None:
+        goal_locs = list(Solver.iter_goal_locs(board_5))
         assert goal_locs == [(2, 6)]
 
         empty_board = Board.new(8, 8)
         assert list(Solver.iter_goal_locs(empty_board)) == []
 
-    def test_iter_aligned_locs(self, board: Board) -> None:
-        assert list(Solver.iter_aligned_locs(board, (2, 6))) == [(2, 3)]
-        assert list(Solver.iter_aligned_locs(board, (4, 2))) == [(4, 1), (5, 2)]
+    def test_iter_aligned_locs(self, board_5: Board) -> None:
+        assert list(Solver.iter_aligned_locs(board_5, (2, 6))) == [(2, 3)]
+        assert list(Solver.iter_aligned_locs(board_5, (4, 2))) == [(4, 1), (5, 2)]
 
     def test_iter_path_locs(self) -> None:
         assert list(Solver.iter_path_locs((2, 3), (2, 6))) == [(2, 3), (2, 4), (2, 5), (2, 6)]
         assert list(Solver.iter_path_locs((4, 4), (4, 1))) == [(4, 1), (4, 2), (4, 3), (4, 4)]
         assert list(Solver.iter_path_locs((5, 5), (1, 5))) == [(1, 5), (2, 5), (3, 5), (4, 5), (5, 5)]
 
-    def test_solve(self, board: Board) -> None:
-        solutions = list(Solver.solve(board))
+    def test_solve(self, board_5: Board) -> None:
+        solutions = list(Solver.solve(board_5))
         assert len(solutions) == 1
         assert solutions[0] == [
             ((5, 2), Direction.Up),

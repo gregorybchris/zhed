@@ -3,8 +3,8 @@ import pytest
 from zhed.models import Board, Tile
 
 
-@pytest.fixture(name="board")
-def board_fixture() -> Board:
+@pytest.fixture(name="board_5")
+def board_5_fixture() -> Board:
     """
     ╭─────────────────╮
     | Level 5         |
