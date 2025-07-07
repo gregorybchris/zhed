@@ -20,7 +20,9 @@ uv sync
 
 ## Usage
 
-Levels can be visualized with the `zhed view` command.
+### `zhed view`
+
+Visualize levels in the terminal.
 
 ```bash
 zhed view 64
@@ -44,20 +46,52 @@ zhed view 64
 ╰-----------------------╯
 ```
 
-A backtracking solver is implemented and can be run with the `zhed solve` command.
+### `zhed solve`
+
+Run a backtracking solver on a specific level or all levels
 
 ```bash
+zhed solve
 zhed solve 10
 ```
 
 ```txt
 Level 10 solved in 0.70 seconds.
-Solution:
 - (2, 4) -> L
 - (1, 3) -> D
 - (4, 2) -> R
 - (2, 5) -> D
 - (5, 5) -> D
+```
+
+### `zhed play`
+
+Play a level in the terminal
+
+```bash
+zhed play 10
+```
+
+Controls:
+
+```txt
+• ↑/↓/←/→  |  move cursor
+• w/a/s/d  |  make move
+• z/u      |  undo move
+• r        |  reset board
+• 1-9      |  set number tile
+• g        |  set goal tile
+• e        |  set empty tile
+• b        |  set blank tile
+• q        |  quit
+```
+
+### `zhed lookup`
+
+Lookup if a solution is already known for a given level.
+
+```bash
+zhed lookup 10
 ```
 
 ## Related work
