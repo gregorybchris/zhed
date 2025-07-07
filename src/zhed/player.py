@@ -84,6 +84,7 @@ Controls:
 
         current_time = time.time()
         if current_time - cursor_toggle_time > cursor_toggle_delay:
+            cursor_visible = not cursor_visible
             cursor_toggle_time = current_time
 
         key = window.getch()
