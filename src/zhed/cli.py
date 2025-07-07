@@ -1,15 +1,13 @@
 import logging
 import time
-from pathlib import Path
 from typing import Annotated, Optional
 
-import yaml
-from pydantic import TypeAdapter
 from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
 
-from zhed.models import Board, Level, Solution
+from zhed.loading import get_level, get_solution, load_levels
+from zhed.models import Board
 from zhed.player import play_cli
 from zhed.printer import Printer
 from zhed.solver import Solver
@@ -138,33 +136,3 @@ def play(
     printer = Printer.new()
     printer.print_board(board)
     printer.print_moves(moves)
-
-
-def get_level(level_number: int) -> Optional[Level]:
-    levels = load_levels()
-    for level in levels:
-        if level.number == level_number:
-            return level
-    return None
-
-
-def get_solution(level_number: int) -> Optional[Solution]:
-    solutions = load_solutions()
-    for solution in solutions:
-        if solution.number == level_number:
-            return solution
-    return None
-
-
-def load_levels() -> list[Level]:
-    levels_filepath = Path(__file__).parent / "data" / "levels.yaml"
-    with levels_filepath.open("r", encoding="utf-8") as fp:
-        levels_obj = yaml.safe_load(fp)
-        return TypeAdapter(list[Level]).validate_python(levels_obj["levels"])
-
-
-def load_solutions() -> list[Solution]:
-    solutions_filepath = Path(__file__).parent / "data" / "solutions.yaml"
-    with solutions_filepath.open("r", encoding="utf-8") as fp:
-        solutions_obj = yaml.safe_load(fp)
-        return TypeAdapter(list[Solution]).validate_python(solutions_obj["solutions"])
