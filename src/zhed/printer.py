@@ -57,6 +57,14 @@ class Printer:
             )
         self.console.print(ret.strip())
 
+    def print_moves_yaml(self, moves: list[Move]) -> None:
+        ret = ""
+        for move in moves:
+            loc, direction = move
+            row, col = loc
+            ret += f'      - [[{row}, {col}], "{direction}"]\n'
+        self.console.print(ret.strip())
+
     def direction_to_color(self, direction: Direction) -> str:
         match direction:
             case Direction.Up:

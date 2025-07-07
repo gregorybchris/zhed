@@ -118,6 +118,7 @@ def edit(
 def play(
     *,
     level_number: Annotated[int, Argument()],
+    use_yaml: Annotated[bool, Option("--yaml/--no-yaml")] = False,
     info: Annotated[bool, Option("--info/--no-info")] = False,
     debug: Annotated[bool, Option("--debug/--no-debug")] = False,
 ) -> None:
@@ -135,4 +136,7 @@ def play(
     board, moves = play_cli(board, enable_edits=False)
     printer = Printer.new()
     printer.print_board(board)
-    printer.print_moves(moves)
+    if use_yaml:
+        printer.print_moves_yaml(moves)
+    else:
+        printer.print_moves(moves)
