@@ -5,15 +5,17 @@ from typing import Annotated, Optional
 
 import yaml
 from pydantic import TypeAdapter
+from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
 
-from zhed.models import Level
+from zhed.models import Level, Solution
 from zhed.printer import Printer
 from zhed.solver import Solver
 
 logger = logging.getLogger(__name__)
 
+console = Console()
 app = Typer(pretty_exceptions_enable=False)
 
 
@@ -53,9 +55,31 @@ def solve(
         start_time = time.time()
         for moves in Solver.solve(board):
             elapsed_time = time.time() - start_time
-            printer.console.print(f"Level {level.number} solved in {elapsed_time:.2f} seconds.")
+            console.print(f"Level {level.number} solved in {elapsed_time:.2f} seconds.")
             printer.print_moves(moves)
             break
+
+
+@app.command()
+def lookup(
+    *,
+    level_number: Annotated[Optional[int], Argument()] = None,
+    info: Annotated[bool, Option("--info/--no-info")] = False,
+    debug: Annotated[bool, Option("--debug/--no-debug")] = False,
+) -> None:
+    init_logging(info=info, debug=debug)
+
+    printer = Printer.new()
+
+    solutions = load_solutions()
+    for solution in solutions:
+        if level_number is not None and solution.number != level_number:
+            continue
+
+        printer.print_moves(solution.moves)
+        break
+    else:
+        console.print(f"No solution previously found for level {level_number}")
 
 
 @app.command()
@@ -82,3 +106,10 @@ def load_levels() -> list[Level]:
     with levels_filepath.open("r", encoding="utf-8") as fp:
         levels_obj = yaml.safe_load(fp)
         return TypeAdapter(list[Level]).validate_python(levels_obj["levels"])
+
+
+def load_solutions() -> list[Solution]:
+    solutions_filepath = Path(__file__).parent / "data" / "solutions.yaml"
+    with solutions_filepath.open("r", encoding="utf-8") as fp:
+        solutions_obj = yaml.safe_load(fp)
+        return TypeAdapter(list[Solution]).validate_python(solutions_obj["solutions"])
