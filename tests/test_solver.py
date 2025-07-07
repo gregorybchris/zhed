@@ -99,6 +99,18 @@ class TestSolver:
         assert list(Solver.iter_path_locs((4, 4), (4, 1))) == [(4, 1), (4, 2), (4, 3), (4, 4)]
         assert list(Solver.iter_path_locs((5, 5), (1, 5))) == [(1, 5), (2, 5), (3, 5), (4, 5), (5, 5)]
 
+    def test_iter_path_aligned_locs_yields_locs_perpendicular_to_path(self, board_10: Board) -> None:
+        loc_a = (4, 2)
+        loc_b = (4, 5)
+        path_aligned_locs = list(Solver.iter_path_aligned_locs(board_10, loc_a, loc_b))
+        assert path_aligned_locs == [(1, 3), (2, 4)]
+
+    def test_iter_path_aligned_locs_yields_locs_before_in_line(self, board_10: Board) -> None:
+        loc_a = (5, 5)
+        loc_b = (7, 5)
+        path_aligned_locs = list(Solver.iter_path_aligned_locs(board_10, loc_a, loc_b))
+        assert path_aligned_locs == [(2, 5)]
+
     def test_solve(self, board_5: Board) -> None:
         solutions = list(Solver.solve(board_5))
         assert len(solutions) == 1

@@ -60,6 +60,40 @@ class Solver:
             yield from ((row, col_a) for row in range(min(row_a, row_b), max(row_a, row_b) + 1))
 
     @classmethod
+    def iter_path_aligned_locs(cls, board: Board, loc_a: Loc, loc_b: Loc) -> Iterator[Loc]:
+        row_a, col_a = loc_a
+        row_b, col_b = loc_b
+
+        assert loc_a != loc_b, f"Locs {loc_a} and {loc_b} must be different."
+        assert row_a == row_b or col_a == col_b, f"Locs {loc_a} and {loc_b} must be aligned"
+
+        if row_a == row_b:  # Horizontal path
+            for col in range(min(col_a, col_b) + 1, max(col_a, col_b)):
+                for row in range(board.n_rows):
+                    if row != row_a and board.is_number((row, col)):
+                        yield (row, col)
+
+            step = -1 if col_a < col_b else 1
+            col = col_a + step
+            while 0 <= col < board.n_cols:
+                if board.is_number((row_a, col)):
+                    yield (row_a, col)
+                col += step
+
+        elif col_a == col_b:  # Vertical path
+            for row in range(min(row_a, row_b) + 1, max(row_a, row_b)):
+                for col in range(board.n_cols):
+                    if col != col_a and board.is_number((row, col)):
+                        yield (row, col)
+
+            step = -1 if row_a < row_b else 1
+            row = row_a + step
+            while 0 <= row < board.n_rows:
+                if board.is_number((row, col_a)):
+                    yield (row, col_a)
+                row += step
+
+    @classmethod
     def make_move(cls, board: Board, move: Move) -> tuple[bool, list[Edit]]:
         loc, direction = move
         value = board.get(loc)
