@@ -9,7 +9,8 @@ from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
 
-from zhed.models import Level, Solution
+from zhed.models import Board, Level, Solution
+from zhed.player import play_cli
 from zhed.printer import Printer
 from zhed.solver import Solver
 
@@ -63,7 +64,7 @@ def solve(
 @app.command()
 def lookup(
     *,
-    level_number: Annotated[Optional[int], Argument()] = None,
+    level_number: Annotated[int, Argument()],
     info: Annotated[bool, Option("--info/--no-info")] = False,
     debug: Annotated[bool, Option("--debug/--no-debug")] = False,
 ) -> None:
@@ -71,21 +72,18 @@ def lookup(
 
     printer = Printer.new()
 
-    solutions = load_solutions()
-    for solution in solutions:
-        if level_number is not None and solution.number != level_number:
-            continue
+    solution = get_solution(level_number)
+    if solution is None:
+        console.print(f"[red]No solution previously found for level {level_number}")
+        return
 
-        printer.print_moves(solution.moves)
-        break
-    else:
-        console.print(f"No solution previously found for level {level_number}")
+    printer.print_moves(solution.moves)
 
 
 @app.command()
 def view(
     *,
-    level_number: Annotated[Optional[int], Argument()] = None,
+    level_number: Annotated[int, Argument()],
     info: Annotated[bool, Option("--info/--no-info")] = False,
     debug: Annotated[bool, Option("--debug/--no-debug")] = False,
 ) -> None:
@@ -93,12 +91,69 @@ def view(
 
     printer = Printer.new()
 
+    level = get_level(level_number)
+    if level is None:
+        console.print(f"[red]Level {level_number} not found")
+        return
+
+    printer.print_level(level)
+
+
+@app.command()
+def edit(
+    *,
+    n_rows: Annotated[int, Argument()],
+    n_cols: Annotated[int, Argument()],
+    info: Annotated[bool, Option("--info/--no-info")] = False,
+    debug: Annotated[bool, Option("--debug/--no-debug")] = False,
+) -> None:
+    init_logging(info=info, debug=debug)
+
+    printer = Printer.new()
+    board = Board.new(n_rows, n_cols)
+    board, moves = play_cli(board)
+    printer.print_board(board)
+    printer.print_moves(moves)
+
+
+@app.command()
+def play(
+    *,
+    level_number: Annotated[int, Argument()],
+    info: Annotated[bool, Option("--info/--no-info")] = False,
+    debug: Annotated[bool, Option("--debug/--no-debug")] = False,
+) -> None:
+    init_logging(info=info, debug=debug)
+
+    printer = Printer.new()
+
+    level = get_level(level_number)
+    if level is None:
+        console.print(f"[red]Level {level_number} not found")
+        return
+
+    printer.print_level(level)
+    board = level.get_board()
+    board, moves = play_cli(board)
+    printer = Printer.new()
+    printer.print_board(board)
+    printer.print_moves(moves)
+
+
+def get_level(level_number: int) -> Optional[Level]:
     levels = load_levels()
     for level in levels:
-        if level_number is not None and level.number != level_number:
-            continue
+        if level.number == level_number:
+            return level
+    return None
 
-        printer.print_level(level)
+
+def get_solution(level_number: int) -> Optional[Solution]:
+    solutions = load_solutions()
+    for solution in solutions:
+        if solution.number == level_number:
+            return solution
+    return None
 
 
 def load_levels() -> list[Level]:
