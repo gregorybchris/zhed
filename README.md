@@ -28,7 +28,7 @@ Visualize levels in the terminal.
 zhed view 64
 ```
 
-```txt
+```hs
 ╭-----------------------╮
 │ Level 64              │
 ├-----------------------┤
@@ -86,12 +86,12 @@ Controls:
 • q        |  quit
 ```
 
-### `zhed lookup`
+### `zhed check`
 
-Lookup if a solution is already known for a given level.
+Check if a solution is already known for a given level.
 
 ```bash
-zhed lookup 10
+zhed check 10
 ```
 
 ## Related work

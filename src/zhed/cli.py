@@ -60,7 +60,7 @@ def solve(
 
 
 @app.command()
-def lookup(
+def check(
     *,
     level_number: Annotated[int, Argument()],
     info: Annotated[bool, Option("--info/--no-info")] = False,
