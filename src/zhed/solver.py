@@ -27,8 +27,7 @@ class Solver:
         for row in range(board.n_rows):
             for col in range(board.n_cols):
                 loc = (row, col)
-                value = board.get(loc)
-                if value not in (Tile.Empty, Tile.Blank, Tile.Goal):
+                if board.is_number(loc):
                     yield loc
 
     @classmethod
@@ -64,7 +63,7 @@ class Solver:
     def make_move(cls, board: Board, move: Move) -> tuple[bool, list[Edit]]:
         loc, direction = move
         value = board.get(loc)
-        assert value not in (Tile.Empty, Tile.Blank, Tile.Goal)
+        assert board.is_number(loc), f"Cannot move from {loc} which is not a number tile."
 
         board.set(loc, Tile.Blank)
         edits = [(loc, value)]

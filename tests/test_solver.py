@@ -1,3 +1,7 @@
+import re
+
+import pytest
+
 from zhed.models import Board, Direction, Tile
 from zhed.solver import Solver
 
@@ -46,6 +50,11 @@ class TestSolver:
         assert board.get((4, 3)) == Tile.Blank
         assert board.get((4, 4)) == Tile.Blank
         assert board.get((4, 5)) == Tile.Empty
+
+    def test_make_move_raises_on_non_number(self, board: Board) -> None:
+        move = ((0, 0), Direction.Up)
+        with pytest.raises(AssertionError, match=re.escape("Cannot move from (0, 0) which is not a number tile.")):
+            Solver.make_move(board, move)
 
     def test_undo_edits(self, board: Board) -> None:
         move_1 = ((5, 2), Direction.Up)

@@ -21,3 +21,15 @@ class TestBoard:
         assert not board.in_bounds((0, 4))
         assert not board.in_bounds((-1, 0))
         assert not board.in_bounds((0, -1))
+
+    def test_is_number(self) -> None:
+        board = Board.new(3, 4)
+        loc_number = (1, 1)
+        loc_blank = (0, 0)
+        loc_empty = (2, 2)
+        board.set(loc_number, 3)
+        board.set(loc_blank, Tile.Blank)
+        board.set(loc_empty, Tile.Empty)
+        assert board.is_number(loc_number)
+        assert not board.is_number(loc_blank)
+        assert not board.is_number(loc_empty)

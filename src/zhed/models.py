@@ -45,6 +45,9 @@ class Board:
         row, col = loc
         self.tiles[row][col] = value
 
+    def is_number(self, loc: Loc) -> bool:
+        return self.get(loc) not in (Tile.Empty, Tile.Blank, Tile.Goal)
+
     def in_bounds(self, loc: Loc) -> bool:
         row, col = loc
         return row >= 0 and row < self.n_rows and col >= 0 and col < self.n_cols
