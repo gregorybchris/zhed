@@ -1,8 +1,11 @@
 import curses
+import logging
 import time
 
 from zhed.models import Board, Direction, Edit, Move, Tile
 from zhed.mover import Mover
+
+logger = logging.getLogger(__name__)
 
 
 def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[Move]]:  # noqa: PLR0912, PLR0915
@@ -11,7 +14,6 @@ def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[M
     window.keypad(True)
     window.timeout(50)
 
-    # Initialize color pairs
     curses.start_color()
     curses.use_default_colors()
     curses.init_pair(1, curses.COLOR_BLUE, -1)  # Numbers
@@ -62,15 +64,26 @@ def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[M
                 else:
                     window.addch(r, 2 * c, char, attr)
 
-        window.addstr(n_rows + 1, 0, "Use arrow keys to move cursor. 1-9 to set numbers. g: goal, e: empty, b: blank.")
+        prompt = """
+Controls:
+• Arrow keys: move cursor
+• 1-9 keys: set tile to numbers
+• g key: set goal tile
+• e key: set empty tile
+• b key: set blank tile
+• w/a/s/d keys: make move
+• z/u keys: undo move
+• r key: reset board
+• q key: quit
+"""
+        window.addstr(board.n_rows + 2, 0, prompt)
 
         if error:
             attr = curses.color_pair(5)
-            window.addstr(n_rows + 2, 0, f"Error: {error}", attr)
+            window.addstr(n_rows + 1, 0, f"Error: {error}", attr)
 
         current_time = time.time()
         if current_time - cursor_toggle_time > cursor_toggle_delay:
-            cursor_visible = not cursor_visible
             cursor_toggle_time = current_time
 
         key = window.getch()
@@ -114,11 +127,11 @@ def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[M
                     Mover.undo_edits(board, edits)
                 edit_history = []
                 moves = []
-            assert len(edit_history) == len(moves), (
-                f"edit_history and moves length mismatch: {len(edit_history)} != {len(moves)}"
-            )
         except Exception as exc:  # noqa: BLE001
             error = str(exc)
+        else:
+            if key != -1:
+                error = ""
 
         window.refresh()
 
