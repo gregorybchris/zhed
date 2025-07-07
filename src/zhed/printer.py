@@ -47,7 +47,7 @@ class Printer:
         self.console.print(ret.strip())
 
     def print_moves(self, moves: list[Move]) -> None:
-        ret = "Solution:\n"
+        ret = ""
         for move in moves:
             loc, direction = move
             row, col = loc
