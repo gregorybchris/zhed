@@ -70,15 +70,15 @@ def start_curses_cli(  # noqa: PLR0912, PLR0915
 
         prompt = """
 Controls:
-• Arrow keys: move cursor
-• 1-9 keys: set tile to numbers
-• g key: set goal tile
-• e key: set empty tile
-• b key: set blank tile
-• w/a/s/d keys: make move
-• z/u keys: undo move
-• r key: reset board
-• q key: quit
+• ↑/↓/←/→  |  move cursor
+• w/a/s/d  |  make move
+• z/u      |  undo move
+• r        |  reset board
+• 1-9      |  set number tile
+• g        |  set goal tile
+• e        |  set empty tile
+• b        |  set blank tile
+• q        |  quit
 """
         window.addstr(board.n_rows + 2, 0, prompt)
 

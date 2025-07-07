@@ -55,7 +55,7 @@ class Printer:
             ret += (
                 f"[white]• [reset]([white]{row}[reset], [white]{col}[reset]) [white]→ [{direction_color}]{direction}\n"
             )
-        self.console.print(ret.strip())
+        self.console.print(ret)
 
     def print_moves_yaml(self, moves: list[Move]) -> None:
         ret = ""
@@ -63,7 +63,7 @@ class Printer:
             loc, direction = move
             row, col = loc
             ret += f'      - [[{row}, {col}], "{direction}"]\n'
-        self.console.print(ret.strip())
+        self.console.print(ret)
 
     def direction_to_color(self, direction: Direction) -> str:
         match direction:
