@@ -8,7 +8,11 @@ from zhed.mover import Mover
 logger = logging.getLogger(__name__)
 
 
-def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[Move]]:  # noqa: PLR0912, PLR0915
+def start_curses_cli(  # noqa: PLR0912, PLR0915
+    window: curses.window,
+    board: Board,
+    enable_edits: bool,
+) -> tuple[Board, list[Move]]:
     curses.curs_set(0)
     window.nodelay(True)
     window.keypad(True)
@@ -102,13 +106,13 @@ Controls:
             elif key == curses.KEY_RIGHT:
                 col = min(n_cols - 1, col + 1)
             # Setting tiles on board
-            elif key in range(ord("1"), ord("9") + 1):
+            elif key in range(ord("1"), ord("9") + 1) and enable_edits:
                 board.set((row, col), key - ord("0"))
-            elif key == ord("g"):
+            elif key == ord("g") and enable_edits:
                 board.set((row, col), Tile.Goal)
-            elif key == ord("e"):
+            elif key == ord("e") and enable_edits:
                 board.set((row, col), Tile.Empty)
-            elif key == ord("b"):
+            elif key == ord("b") and enable_edits:
                 board.set((row, col), Tile.Blank)
             # Making moves on board
             elif key in (ord("w"), ord("a"), ord("s"), ord("d")):
@@ -153,8 +157,8 @@ def key_to_direction(key: int) -> Direction:
     raise ValueError(msg)
 
 
-def play_cli(board: Board) -> tuple[Board, list[Move]]:
+def play_cli(board: Board, *, enable_edits: bool) -> tuple[Board, list[Move]]:
     def curses_func(window: curses.window) -> tuple[Board, list[Move]]:
-        return start_curses_cli(window, board)
+        return start_curses_cli(window, board, enable_edits)
 
     return curses.wrapper(curses_func)

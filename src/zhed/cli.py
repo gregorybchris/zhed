@@ -109,7 +109,7 @@ def edit(
 
     printer = Printer.new()
     board = Board.new(n_rows, n_cols)
-    board, moves = play_cli(board)
+    board, moves = play_cli(board, enable_edits=True)
     printer.print_board(board)
     printer.print_moves(moves)
 
@@ -132,7 +132,7 @@ def play(
 
     printer.print_level(level)
     board = level.get_board()
-    board, moves = play_cli(board)
+    board, moves = play_cli(board, enable_edits=False)
     printer = Printer.new()
     printer.print_board(board)
     printer.print_moves(moves)
