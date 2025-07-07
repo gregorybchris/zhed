@@ -68,3 +68,12 @@ class TestMover:
         assert board_5.get((4, 2)) == Tile.Empty
         assert board_5.get((3, 2)) == Tile.Empty
         assert board_5.get((2, 2)) == Tile.Empty
+
+    def test_move_to_goal_tile(self) -> None:
+        board = Board.new(2, 2)
+        board.set((0, 0), 1)
+        board.set((0, 1), Tile.Goal)
+        has_won, edits = Mover.make_move(board, ((0, 0), Direction.Right))
+        assert board.get((0, 1)) == Tile.Blank
+        assert has_won
+        assert edits == [((0, 0), 1), ((0, 1), Tile.Goal)]

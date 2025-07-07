@@ -29,6 +29,8 @@ class Mover:
                     max_offset += 1
                 case Tile.Goal:
                     has_won = True
+                    board.set(offset_loc, Tile.Blank)
+                    edits.append((offset_loc, Tile.Goal))
                 case _:
                     max_offset += 1
 
