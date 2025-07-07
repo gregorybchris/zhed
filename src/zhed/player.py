@@ -9,6 +9,16 @@ def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[M
     curses.curs_set(0)
     window.nodelay(True)
     window.keypad(True)
+    window.timeout(50)
+
+    # Initialize color pairs
+    curses.start_color()
+    curses.use_default_colors()
+    curses.init_pair(1, curses.COLOR_BLUE, -1)  # Numbers
+    curses.init_pair(2, curses.COLOR_BLACK, -1)  # Empty tiles
+    curses.init_pair(3, curses.COLOR_GREEN, -1)  # Goal tiles
+    curses.init_pair(4, curses.COLOR_BLACK, -1)  # Blank tiles
+    curses.init_pair(5, curses.COLOR_RED, -1)  # Errors
 
     cursor_toggle_time = time.time()
     cursor_visible = True
@@ -31,22 +41,32 @@ def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[M
             for c in range(n_cols):
                 value = board.get((r, c))
 
-                if (r, c) == (row, col) and cursor_visible:
-                    char = " "
+                attr = curses.A_NORMAL
+                if value == Tile.Goal:
+                    char = "◎"
+                    attr = curses.color_pair(3)
                 elif value == Tile.Empty:
-                    char = "."
+                    char = "□"
+                    attr = curses.color_pair(2)
                 elif value == Tile.Blank:
                     char = "■"
-                elif value == Tile.Goal:
-                    char = "◎"
-                else:
+                    attr = curses.color_pair(4)
+                elif isinstance(value, int):
                     char = str(value)
-                window.addch(r, 2 * c, char)
+                    attr = curses.color_pair(1)
+                else:
+                    char = " "
+
+                if (r, c) == (row, col) and cursor_visible:
+                    window.addch(r, 2 * c, " ")
+                else:
+                    window.addch(r, 2 * c, char, attr)
 
         window.addstr(n_rows + 1, 0, "Use arrow keys to move cursor. 1-9 to set numbers. g: goal, e: empty, b: blank.")
 
         if error:
-            window.addstr(n_rows + 2, 0, f"Error: {error}")
+            attr = curses.color_pair(5)
+            window.addstr(n_rows + 2, 0, f"Error: {error}", attr)
 
         current_time = time.time()
         if current_time - cursor_toggle_time > cursor_toggle_delay:
@@ -80,15 +100,23 @@ def start_curses_cli(window: curses.window, board: Board) -> tuple[Board, list[M
             elif key in (ord("w"), ord("a"), ord("s"), ord("d")):
                 direction = key_to_direction(key)
                 move = ((row, col), direction)
-                moves.append(move)
                 has_won, edits = Mover.make_move(board, move)
+                moves.append(move)
                 edit_history.append(edits)
                 if has_won:
                     break
-            elif key == ord("u") and len(edit_history) > 0:
+            elif key in (ord("z"), ord("u")) and len(moves) > 0:
                 edits = edit_history.pop()
                 moves.pop()
                 Mover.undo_edits(board, edits)
+            elif key == ord("r"):
+                for edits in reversed(edit_history):
+                    Mover.undo_edits(board, edits)
+                edit_history = []
+                moves = []
+            assert len(edit_history) == len(moves), (
+                f"edit_history and moves length mismatch: {len(edit_history)} != {len(moves)}"
+            )
         except Exception as exc:  # noqa: BLE001
             error = str(exc)
 

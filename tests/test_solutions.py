@@ -18,7 +18,12 @@ class TestSolutions:
                 continue
 
             board = level.get_board()
-            has_won, _ = Mover.make_moves(board, solution.moves)
+            try:
+                has_won, _ = Mover.make_moves(board, solution.moves)
+            except Exception as exc:
+                msg = f"Exception raised when applying solution for level {level.number}: {exc}"
+                raise AssertionError(msg) from exc
             assert has_won, f"Solution for level {level.number} did not result in a win"
             n_tested += 1
-        logger.info(f"Tested {n_tested} solutions")
+
+        logger.info("Tested %d solutions", n_tested)
