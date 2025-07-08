@@ -93,7 +93,7 @@ Controls:
 
 ### `zhed check`
 
-Check if a solution is already known for a given level.
+Check if a solution is already known for a given level and if it is make sure that it is correct by running it against its level.
 
 ```bash
 zhed check 10

@@ -8,6 +8,7 @@ from typer import Argument, Option, Typer
 
 from zhed.loading import get_level, get_solution, load_levels
 from zhed.models import Board
+from zhed.mover import Mover
 from zhed.player import play_cli
 from zhed.printer import Printer
 from zhed.solver import Solver
@@ -70,12 +71,30 @@ def check(
 
     printer = Printer.new()
 
+    level = get_level(level_number)
+    if level is None:
+        console.print(f"[red]Level {level_number} not found")
+        return
+
     solution = get_solution(level_number)
     if solution is None:
         console.print(f"[red]No solution previously found for level {level_number}")
         return
 
-    printer.print_moves(solution.moves)
+    board = level.get_board()
+    has_won = False
+    for move in solution.moves:
+        has_won, _ = Mover.make_move(board, move)
+
+    if has_won:
+        console.print(f"[green]Solution for level {level_number} leads to a win![/green]")
+        printer.print_board(board)
+        printer.print_moves(solution.moves)
+        return
+
+    console.print(f"[red]Solution for level {level_number} does not lead to a win")
+    printer.print_board(board)
+    return
 
 
 @app.command()
