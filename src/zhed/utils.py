@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from zhed.models import Board, Direction, Loc, Tile
+from zhed.models import Board, Direction, Loc, Move, Tile
 
 
 def iter_number_locs(board: Board) -> Iterator[Loc]:
@@ -40,7 +40,7 @@ def iter_path_locs(loc_a: Loc, loc_b: Loc) -> Iterator[Loc]:
         yield from ((row, col_a) for row in range(min(row_a, row_b), max(row_a, row_b) + 1))
 
 
-def iter_path_aligned_locs(board: Board, loc_a: Loc, loc_b: Loc) -> Iterator[Loc]:
+def iter_path_aligned_moves(board: Board, loc_a: Loc, loc_b: Loc) -> Iterator[Move]:
     row_a, col_a = loc_a
     row_b, col_b = loc_b
 
@@ -51,26 +51,30 @@ def iter_path_aligned_locs(board: Board, loc_a: Loc, loc_b: Loc) -> Iterator[Loc
         for col in range(min(col_a, col_b) + 1, max(col_a, col_b)):
             for row in range(board.n_rows):
                 if row != row_a and board.is_number((row, col)):
-                    yield (row, col)
+                    direction = Direction.Down if row < row_a else Direction.Up
+                    yield ((row, col), direction)
 
         step = -1 if col_a < col_b else 1
         col = col_a + step
         while 0 <= col < board.n_cols:
             if board.is_number((row_a, col)):
-                yield (row_a, col)
+                direction = Direction.Right if col_a < col_b else Direction.Left
+                yield ((row_a, col), direction)
             col += step
 
     elif col_a == col_b:  # Vertical path
         for row in range(min(row_a, row_b) + 1, max(row_a, row_b)):
             for col in range(board.n_cols):
                 if col != col_a and board.is_number((row, col)):
-                    yield (row, col)
+                    direction = Direction.Right if col < col_a else Direction.Left
+                    yield ((row, col), direction)
 
         step = -1 if row_a < row_b else 1
         row = row_a + step
         while 0 <= row < board.n_rows:
             if board.is_number((row, col_a)):
-                yield (row, col_a)
+                direction = Direction.Down if row_a < row_b else Direction.Up
+                yield ((row, col_a), direction)
             row += step
 
 
