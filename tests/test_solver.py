@@ -12,3 +12,13 @@ class TestSolver:
             ((5, 4), Direction.Up),
             ((2, 3), Direction.Right),
         ]
+
+    def test_solve_slow(self, board_5: Board) -> None:
+        solutions = list(Solver.solve_slow(board_5))
+        assert len(solutions) == 1
+        assert solutions[0] == [
+            ((5, 2), Direction.Up),
+            ((4, 1), Direction.Right),
+            ((5, 4), Direction.Up),
+            ((2, 3), Direction.Right),
+        ]
