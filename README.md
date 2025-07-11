@@ -106,3 +106,19 @@ zhed check 10
 - [glguy/5puzzle](https://github.com/glguy/5puzzle)
 - [MOAAS/ZhedAI](https://github.com/MOAAS/ZhedAI)
 - [mikkelschmidt14/ZhedSolver](https://github.com/mikkelschmidt14/ZhedSolver)
+
+## Notes
+
+In some versions of the game, level 75 is slightly different. This small change does not affect how the level is played, however.
+
+```txt
+Used in this repo:
+1 . .
+. 1 .
+. . .
+
+Seen elsewhere:
+1 . .
+. . 1
+. 1 .
+```
