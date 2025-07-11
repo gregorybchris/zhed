@@ -10,6 +10,7 @@ dependencies = [
 ]
 description = "Zhed puzzle game solver."
 keywords = ["zhed", "puzzle", "game", "solver"]
+license = { text = "MIT" }
 name = "zhed"
 readme = "README.md"
 requires-python = ">=3.13"
