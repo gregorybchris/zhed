@@ -10,12 +10,12 @@
 
 This repo contains:
 
-- All levels from the game encoded in [levels.yaml](./src/zhed/data//levels.yaml)
-- Solutions for the levels in [solutions.yaml](./src/zhed/data/solutions.yaml)
-- A terminal-based version of the game
-- A solver for the [Zhed puzzle game](https://play.google.com/store/apps/details?id=com.groundcontrol.zhed)
+- [All 100 levels](./src/zhed/data//levels.yaml) from the [Zhed puzzle game](https://play.google.com/store/apps/details?id=com.groundcontrol.zhed) encoded as YAML
+- [Solutions](./src/zhed/data/solutions.yaml) for all levels
+- A playable terminal-based version of the game
+- A fast solver
 
-> It's worth noting that unlike many of the solvers available online, this solver does not use a simple backtracking search. Instead, it starts at the goal tile and determines which moves unblock a path to the goal tile. This allows it to solve levels much faster than some other solvers, especially for larger levels. See [solver.py](./src/zhed/solver.py).
+> Unlike many Zhed solvers available online, this solver does not use a brute-force backtracking search. Instead, it starts at the goal tile and determines which moves unblock a path to the goal tile. See [solver.py](./src/zhed/solver.py) for my implementation (as well as a brute-force backtracking solver for comparison).
 
 ## Installation
 
@@ -103,7 +103,7 @@ zhed check 10
 
 ## Benchmark
 
-I ran a benchmark on the first 20 levels to see how much faster a solver can be when it starts at the goal tile and backtracks to determine moves that unblock a path to the goal tile. It's significantly faster.
+I ran a benchmark to compare the brute-force naïve implementation vs the fast solver that starts at the goal tile and works backwards. The fast solver is significantly faster.
 
 | Level | Slow Solver | Fast Solver | Speedup  |
 | ----- | ----------- | ----------- | -------- |
