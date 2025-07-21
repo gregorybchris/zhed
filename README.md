@@ -15,7 +15,7 @@ This repo contains:
 - A terminal-based version of the game
 - A solver for the [Zhed puzzle game](https://play.google.com/store/apps/details?id=com.groundcontrol.zhed)
 
-> It's worth noting that unlike many of the solvers available online, this solver does not use a simple backtracking search. Instead, it starts at the goal tile and determines which moves unblock a path to the goal tile. This allows it to solve levels much faster than some other solvers, especially for larger levels.
+> It's worth noting that unlike many of the solvers available online, this solver does not use a simple backtracking search. Instead, it starts at the goal tile and determines which moves unblock a path to the goal tile. This allows it to solve levels much faster than some other solvers, especially for larger levels. See [solver.py](./src/zhed/solver.py).
 
 ## Installation
 

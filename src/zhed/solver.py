@@ -40,6 +40,9 @@ class Solver:
         else:
             Mover.undo_edits(board, edits)
 
+        # TODO: Sort candidates by their distance to the path, closest to path first.
+        # Distance here means the number of additional tiles needed for the candidate to overlap the path.
+        # TODO: This doesn't need to be an iterator since we just convert it to a list.
         new_candidates = list(utils.iter_path_aligned(board, loc_a, loc_b))
         for path_aligned_candidate, rest_new_candidates in utils.iter_one_and_rest(new_candidates):
             move, path_loc = path_aligned_candidate
