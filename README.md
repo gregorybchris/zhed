@@ -15,7 +15,7 @@ This repo contains:
 - A playable terminal-based version of the game
 - A fast solver
 
-> Unlike many Zhed solvers available online, this solver does not use a brute-force backtracking search. Instead, it starts at the goal tile and determines which moves unblock a path to the goal tile. See [solver.py](./src/zhed/solver.py) for my implementation (as well as a brute-force backtracking solver for comparison).
+> Unlike many Zhed solvers available online, this solver does not use a brute-force backtracking search. Instead, it starts at the goal tile and determines which moves unblock a path to the goal tile. See [solver.py](./src/zhed/solver.py) for my implementation.
 
 ## Installation
 
