@@ -55,7 +55,7 @@ zhed view 64
 
 ### `zhed solve`
 
-Run a backtracking solver on a specific level or all levels
+Run the solver on a specific level or all levels
 
 ```bash
 zhed solve
@@ -95,7 +95,7 @@ Controls:
 
 ### `zhed check`
 
-Check if a solution is already known for a given level and if it is make sure that it is correct by running it against its level.
+Verify a known solution by simulating moves and checking that the goal tile is reached.
 
 ```bash
 zhed check 10
