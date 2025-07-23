@@ -1,9 +1,10 @@
 import logging
+import threading
 import time
 from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from enum import StrEnum, auto
-from typing import Optional, Union
+from typing import Any, Optional
 
 import rich.box
 from rich.console import Console
@@ -18,13 +19,9 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class SuccessResult:
-    elapsed_time: float
-
-
-@dataclass
-class FailureResult:
-    error_message: str
+class Result:
+    elapsed_time: Optional[float] = None
+    error_message: Optional[str] = None
 
 
 class Speed(StrEnum):
@@ -32,11 +29,14 @@ class Speed(StrEnum):
     Slow = auto()
 
 
-Result = Union[SuccessResult, FailureResult]
 ResultKey = tuple[int, Speed]
 
 
-def solve(board: Board, speed: Speed) -> Optional[float]:
+class TimeoutError(Exception):
+    pass
+
+
+def solve(board: Board, speed: Speed, result_container: list[Any]) -> None:
     match speed:
         case Speed.Fast:
             solutions = Solver.solve(board)
@@ -47,33 +47,55 @@ def solve(board: Board, speed: Speed) -> Optional[float]:
     first_solution = next(solutions, None)
     elapsed_time = time.time() - start_time
 
-    return elapsed_time if first_solution is not None else None
+    if first_solution is not None:
+        result_container.append(elapsed_time)
+    else:
+        result_container.append(None)
+
+
+def run_solve_thread(board: Board, speed: Speed, timeout: int) -> Optional[float]:
+    result_container: list[Any] = []
+    thread = threading.Thread(target=solve, args=(board, speed, result_container))
+    thread.daemon = True
+    thread.start()
+    thread.join(timeout)
+
+    if thread.is_alive():
+        msg = "Operation timed out"
+        raise TimeoutError(msg)
+
+    if len(result_container) == 0:
+        msg = "Thread completed but no result available"
+        raise RuntimeError(msg)
+
+    return result_container[0]
 
 
 def result_to_str(result: Result) -> str:
-    match result:
-        case SuccessResult(elapsed_time):
-            return f"{elapsed_time:.5f}s"
-        case FailureResult(error_message):
-            return error_message
+    if result.elapsed_time is not None:
+        return f"{result.elapsed_time:.6f}"
+    if result.error_message is not None:
+        return result.error_message
+    msg = f"Unexpected result: {result!r}"
+    raise ValueError(msg)
 
 
 def create_benchmark_table(levels: list[int], results_map: dict[ResultKey, Result]) -> Table:
     table = Table(title="Zhed Solver Benchmark", box=rich.box.SIMPLE)
     table.add_column("Level", justify="center", style="bold")
-    table.add_column("Slow Solver", justify="right")
-    table.add_column("Fast Solver", justify="right")
+    table.add_column("Slow Solver (s)", justify="right")
+    table.add_column("Fast Solver (s)", justify="right")
     table.add_column("Speedup", justify="right", style="green")
 
     for level_num in sorted(levels):
-        result_fast = results_map.get((level_num, Speed.Fast), FailureResult("..."))
-        result_slow = results_map.get((level_num, Speed.Slow), FailureResult("..."))
+        result_fast = results_map.get((level_num, Speed.Fast), Result(error_message="..."))
+        result_slow = results_map.get((level_num, Speed.Slow), Result(error_message="..."))
 
         fast_display = result_to_str(result_fast)
         slow_display = result_to_str(result_slow)
 
         speedup_display = ""
-        if isinstance(result_slow, SuccessResult) and isinstance(result_fast, SuccessResult):
+        if result_slow.elapsed_time is not None and result_fast.elapsed_time is not None:
             if result_fast.elapsed_time == 0:
                 speedup_display = "∞x"
             else:
@@ -111,18 +133,18 @@ def run_benchmark(
         for level in levels[:n_levels]:
             for speed in (Speed.Fast, Speed.Slow):
                 board = level.get_board()
-                future = executor.submit(solve, board, speed)
+                future = executor.submit(run_solve_thread, board, speed, timeout)
                 future_to_key[future] = (level.number, speed)
 
         for future in as_completed(future_to_key.keys()):
             key = future_to_key[future]
             try:
-                if result := future.result(timeout=timeout):
+                if result := future.result():
                     elapsed_time = result
-                    results_map[key] = SuccessResult(elapsed_time)
+                    results_map[key] = Result(elapsed_time=elapsed_time)
                 else:
-                    results_map[key] = FailureResult("No solutions")
+                    results_map[key] = Result(error_message="no solutions")
             except TimeoutError:
-                results_map[key] = FailureResult("Timeout")
+                results_map[key] = Result(error_message="timeout")
 
             live.update(create_benchmark_table(level_numbers, results_map))

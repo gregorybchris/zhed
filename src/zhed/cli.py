@@ -167,7 +167,7 @@ def benchmark(
     *,
     n_levels: Annotated[int, Option("--n-levels", "-n")] = 30,
     max_workers: Annotated[int, Option("--max-workers", "-w")] = 10,
-    timeout: Annotated[int, Option("--timeout", "-t")] = 10,
+    timeout: Annotated[int, Option("--timeout", "-t")] = 60,
     info: Annotated[bool, Option("--info/--no-info")] = False,
     debug: Annotated[bool, Option("--debug/--no-debug")] = False,
 ) -> None:
