@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
 
+from zhed.benchmark import run_benchmark
 from zhed.loading import get_level, get_solution, load_levels
 from zhed.models import Board
 from zhed.mover import Mover
@@ -159,3 +160,21 @@ def play(
         printer.print_moves_yaml(moves)
     else:
         printer.print_moves(moves)
+
+
+@app.command()
+def benchmark(
+    *,
+    n_levels: Annotated[int, Option("--n-levels", "-n")] = 30,
+    max_workers: Annotated[int, Option("--max-workers", "-w")] = 10,
+    timeout: Annotated[int, Option("--timeout", "-t")] = 10,
+    info: Annotated[bool, Option("--info/--no-info")] = False,
+    debug: Annotated[bool, Option("--debug/--no-debug")] = False,
+) -> None:
+    init_logging(info=info, debug=debug)
+
+    run_benchmark(
+        n_levels=n_levels,
+        timeout=timeout,
+        max_workers=max_workers,
+    )

@@ -55,7 +55,7 @@ zhed view 64
 
 ### `zhed solve`
 
-Run the solver on a specific level or all levels
+Run the solver on a specific level or all levels.
 
 ```bash
 zhed solve
@@ -73,7 +73,7 @@ Level 10 solved in 0.70 seconds
 
 ### `zhed play`
 
-Play a level in the terminal
+Play a level in the terminal.
 
 ```bash
 zhed play 10
@@ -99,6 +99,14 @@ Verify a known solution by simulating moves and checking that the goal tile is r
 
 ```bash
 zhed check 10
+```
+
+### `zhed benchmark`
+
+Run a benchmark comparing the brute-force solver with the fast solver.
+
+```bash
+zhed benchmark
 ```
 
 ## Benchmark
